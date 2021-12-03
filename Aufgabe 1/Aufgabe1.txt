@@ -1,0 +1,19 @@
+Part I: Data Exploration and Statistics
+In the first part you will explore the long-term dataset and answer several questions on its basic structure. Find out
+the meaning of the various variables, their structure and boundaries as well as the main statistical parameters.
+This step will provide you with the necessary overview of the several datasets.
+Main objective: Identify the usage profile of different wagon types within the long-term dataset. Apply explorative
+data analysis and statistics. Get started with the following questions:
+• How often are the wagons moved? Which differences can be identified between the wagon types?
+• Are there seasonal dependencies?
+• How much distance do the wagons travel loaded, how much empty? How far do they travel in different
+countries?
+• Does the battery capacity of the telematic device change during the year, what might be the reasons?
+• Use your understanding of the data to derive at least one further insight and explain its significance for
+DB Cargo.
+Helpful tools for Part I might be:
+• Statistics / Explorative data analysis (max/min/mean/deviations…)
+• Plots: timeseries, distributions, boxplots…
+• Heat maps
+Try to automate your analysis toolset as much as possible by writing functions and scripts that aggregate the
+information of various data files. One of the core challenges will be the handling of the large volume of data!

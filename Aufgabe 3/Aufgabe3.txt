@@ -1,0 +1,16 @@
+Part III: Machine Learning Application
+In the third part you will concentrate on the shunting-data and you will focus on the identification of the different
+shunting phases: parking, shunting or driving. The provided data has no labels attached – therefore you have to
+apply unsupervised Machine Learning and use your gained knowledge of the wagon’s usage from Part I and II.
+Main objective: Cluster / classify the operational states of the shunting process: those could include whether a
+wagon is incoming, parked, shunted, positioned on the target track or outgoing, but it’s up to you to find the most
+useful categories for your classification model.
+• Analyze the existing database
+• Extract relevant features for your clustering model
+• Develop a clustering model: you might gain a first overview with features depending on the geofence or
+the wagon moving state
+• Evaluate the errors, uncertainty and robustness of the models and try to validate the models
+• Is your algorithm also transferable on the long-term dataset? Describe the challenges, problems and
+critically discuss the quality of the results
+• If data-related difficulties or impossibilities arise concerning the task, describe reasons and possible
+solutions

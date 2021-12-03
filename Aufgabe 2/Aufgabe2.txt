@@ -1,0 +1,16 @@
+Part II: Data Mining
+In the second part you will analyze the long-term dataset and apply more sophisticated data mining techniques.
+Try to combine the question with your understanding of the DB Cargo business. How can the answer to the task
+help DB Cargo specifically?
+Main objective: Analyze the Mobile network and GNSS quality and coverage and show its structure in different
+regions in Europe within the long-term data.
+• Identify and combine relevant features (e.g. time stamps of data generation and transmission) and position
+data for your analysis
+• Analyze and plot the statistical behavior of your features
+• Be creative on the creation of new features as indicators for the Mobile network quality
+• Fuse the data with geographic information and display your results in a geo-specific heatmap
+• Be aware of appropriate aggregation and clustering of the high volume data
+• Evaluate the errors and uncertainties of your analysis
+• Interpret anomalies and trends in the analysis results
+• Optional: The integration of OpenRailway maps can help to interpret your results
+• If data-related difficulties or impossibilities arise concerning the task, describe reasons and possible solutions
