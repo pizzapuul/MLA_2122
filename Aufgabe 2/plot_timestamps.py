@@ -5,6 +5,12 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import geopandas as gpd
 from shapely.geometry import Point, Polygon
+import time
+
+
+
+# starting time
+start = time.time()
 
 #Preparation for plotting data over europe
 fig, axes = plt.subplots(nrows=1, ncols=1)
@@ -62,7 +68,7 @@ def plot_delta_timestamps(data):
     data['delta_timestamps'] = np.where(data['delta_timestamps']>3600, 5, data['delta_timestamps'])
 
     #Plot delta_timestamps on europe map
-    data.plot(ax=axes, column='delta_timestamps', marker="o", markersize=0.5, cmap=cmap, alpha=0.8)
+    data.plot(ax=axes, column='delta_timestamps', marker="o", markersize=0.5, cmap=cmap, alpha=0.5)
     axes.set_title('delta_timestamps')
     axes.yaxis.set_visible(False)
     axes.xaxis.set_visible(False)
@@ -70,25 +76,37 @@ def plot_delta_timestamps(data):
 
     return(data)
 
+file_list = [] #append each file here
 for file in sorted(os.listdir('C:/Users/BIE/Desktop/Python/MLA/MLA_2122/data')):
-    chunk_list = []  # append each chunk df here 
+    chunk_list = []  #append each chunk df here 
     df_chunk = pd.read_csv('data/'+file, usecols = ['latitude',
                                                     'longitude',
                                                     'timestamp_transfer',
                                                     'timestamp_measure_position'
-                                                    ], low_memory = True, chunksize=10000)
+                                                    ], low_memory = True, chunksize=100000)
     # Each chunk is in df format
     for data in df_chunk:  
+        print('loading chunk')
         # perform data filtering 
-        chunk_filter = plot_delta_timestamps(data)
-        
-        # Once the data filtering is done, append the chunk to list
-        chunk_list.append(chunk_filter)
+        chunk_plot = plot_delta_timestamps(data)
+        # Once the data plotting for the chunk is done, append the chunk to chunk_list
+        chunk_list.append(chunk_plot)
         
     # concat the list into dataframe 
-    df_concat = pd.concat(chunk_list)
+    df_file = pd.concat(chunk_list)
+    # Once the data plotting for the file is done, append the file to file_list
+    file_list.append(df_file)
+    print('chunk complete')
 
-    print(df_concat)
+#concat the list of files into dataframe
+df_all_files = pd.concat(file_list)
+    
+print(df_all_files)
+# end time
+end = time.time()
+
+# total time taken
+print(f"Runtime of the program is {end - start}")
 
 plt.show()
 
