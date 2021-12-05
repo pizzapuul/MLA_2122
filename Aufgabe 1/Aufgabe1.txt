@@ -16,4 +16,4 @@ Helpful tools for Part I might be:
 • Plots: timeseries, distributions, boxplots…
 • Heat maps
 Try to automate your analysis toolset as much as possible by writing functions and scripts that aggregate the
-information of various data files. One of the core challenges will be the handling of the large volume of data!
+information of various data files. One of the core challenges will be the handling of the large volume of data! 
