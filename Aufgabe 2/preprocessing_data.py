@@ -1,18 +1,34 @@
 import pandas as pd
-#from pandas.core.frame import DataFrame
+import numpy as np
 import os
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import geopandas as gpd
+import missingno as msn
+from shapely.geometry import Point, Polygon
 
+#Preparation for plotting data over europe
+fig, ax = plt.subplots(figsize=(8,6))
+world = gpd.read_file(gpd.datasets.get_path("naturalearth_lowres"))
+europe=world[world.continent=='Europe']
+#Remove Russia and Iceland from map of Europe
+europe=europe[(europe.name!='Russia') & (europe.name!='Iceland')]
+# Create a custom polygon
+polygon = Polygon([(-25,35), (40,35), (40,75),(-25,75)])
+#Clip polygon from the map of Europe
+europe=gpd.clip(europe, polygon)
+base = europe.plot(color='#3B3C6E', ax=ax)
    
 for file in sorted(os.listdir('C:/Users/BIE/Desktop/Python/MLA/MLA_2122/data')):
     data = pd.read_csv('data/'+file)
+    #msn.bar(data, color='darkolivegreen') #checking on missing values
     data = pd.DataFrame.dropna(data) #deleting rows which contain NAN values 
     #data = data[data['movement_state'].notna()] #deleting rows which contain NAN values in specific columns
     #data=data.replace(to_replace=['parking', 'standing', 'moving'], value=[1, 2, 3]) #replacing strings with int
     #data=data.replace(to_replace=['Leer', 'Beladen'], value=[0, 1]) #replacing strings with int
     data['timestamp_measure_movement_state'] = data['timestamp_measure_movement_state'].str[:16] #removing unwanted characters
     data['timestamp_index'] = data['timestamp_index'].str[:16] #removing unwanted characters
+
 
     #change values to actual timestamps
     date_range = pd.date_range(start ='1-1-2020', end ='12-31-2020', freq ='24H')
@@ -38,21 +54,22 @@ for file in sorted(os.listdir('C:/Users/BIE/Desktop/Python/MLA/MLA_2122/data')):
     #add coloumn with delta timestamp in seconds
     data['delta_timestamps'] = (data.timestamp_index - data.timestamp_measure_movement_state).dt.total_seconds()
 
-# initialize an axis
-fig, ax = plt.subplots(figsize=(8,6))
-# plot map on axis
-countries = gpd.read_file(  
-     gpd.datasets.get_path("naturalearth_lowres"))
-countries[countries["name"] == "Australia"].plot(color="lightgrey",
-                                                 ax=ax)
-# parse dates for plot's title
-first_month = df["acq_date"].min().strftime("%b %Y")
-last_month = df["acq_date"].max().strftime("%b %Y")
-# plot points
-df.plot(x="longitude", y="latitude", kind="scatter", 
-        c="brightness", colormap="YlOrRd", 
-        title=f"Fires in Australia {first_month} to {last_month}", 
-        ax=ax)
-# add grid
-ax.grid(b=True, alpha=0.5)
+    # Change the coordinates to geoPoints
+    data['coordinates'] = data[['longitude', 'latitude']].values.tolist()
+    data['coordinates'] = data['coordinates'].apply(Point)
+    data = gpd.GeoDataFrame(data, geometry='coordinates')
+
+    #changing delta_timestamps from seconds to qualitative value
+    data['delta_timestamps'] = np.where(data['delta_timestamps'].between(0,60), 1, data['delta_timestamps'])
+    data['delta_timestamps'] = np.where(data['delta_timestamps'].between(60,300), 2, data['delta_timestamps'])
+    data['delta_timestamps'] = np.where(data['delta_timestamps'].between(300,900), 3, data['delta_timestamps'])
+    data['delta_timestamps'] = np.where(data['delta_timestamps'].between(900,3600), 4, data['delta_timestamps'])
+    data['delta_timestamps'] = np.where(data['delta_timestamps']>3600, 5, data['delta_timestamps'])
+    cmap = mpl.colors.LinearSegmentedColormap.from_list("", ["green","yellow","red"])
+    data.plot(ax=base, column='delta_timestamps', marker="*", markersize=1, cmap=cmap, legend=True)
+
+_ = ax.axis('off')
 plt.show()
+
+
+print(data)
