@@ -72,4 +72,3 @@ _ = ax.axis('off')
 plt.show()
 
 
-print(data)
