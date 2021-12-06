@@ -1,13 +1,8 @@
 import pandas as pd
-import numpy as np
 import os
-import matplotlib as mpl
-import matplotlib.pyplot as plt
-import geopandas as gpd
-from shapely.geometry import Point, Polygon
 import time
 import dask.dataframe as dd
-import dask.array as da
+
 
 
 
@@ -44,10 +39,10 @@ def calculate_corr_matrix(data):
     data['delta_timestamps'] = (data.timestamp_transfer - data.timestamp_measure_position).dt.total_seconds()
 
     #changing delta_timestamps from seconds to qualitative value
-    data.delta_timestamps = data['delta_timestamps'].mask(data['delta_timestamps']<60, 1)
+    data.delta_timestamps = data['delta_timestamps'].mask(data['delta_timestamps']<30, 1)
     data.delta_timestamps = data['delta_timestamps'].mask(data['delta_timestamps'].between(30,60), 2)
-    data.delta_timestamps = data['delta_timestamps'].mask(data['delta_timestamps'].between(601,900), 3)
-    data.delta_timestamps = data['delta_timestamps'].mask(data['delta_timestamps'].between(901,3600), 4)
+    data.delta_timestamps = data['delta_timestamps'].mask(data['delta_timestamps'].between(61,600), 3)
+    data.delta_timestamps = data['delta_timestamps'].mask(data['delta_timestamps'].between(601,3600), 4)
     data.delta_timestamps = data['delta_timestamps'].mask(data['delta_timestamps']>3601, 5)
 
     return(data)

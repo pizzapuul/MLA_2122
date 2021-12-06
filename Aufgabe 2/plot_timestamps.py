@@ -8,7 +8,6 @@ from shapely.geometry import Point, Polygon
 import time
 
 
-
 # starting time
 start = time.time()
 
@@ -73,7 +72,6 @@ def plot_delta_timestamps(data):
     axes.yaxis.set_visible(False)
     axes.xaxis.set_visible(False)
 
-
     return(data)
 
 file_list = [] #append each file here
@@ -101,12 +99,10 @@ for file in sorted(os.listdir('C:/Users/BIE/Desktop/Python/MLA/MLA_2122/data')):
 #concat the list of files into dataframe
 df_all_files = pd.concat(file_list)
     
-print(df_all_files)
+#print(df_all_files)
 # end time
 end = time.time()
-
 # total time taken
 print(f"Runtime of the program is {end - start}")
-
 plt.show()
 
