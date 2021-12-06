@@ -36,12 +36,12 @@ def plot_delta_timestamps(data):
         day_list.append(str(i))
 
     #for timestamp_transfer
-    timestamp_transfer_date = data['timestamp_transfer'].str.split(' ').str[0] #Just the Days of the Timestamp
-    timestamp_transfer_date = timestamp_transfer_date.replace(to_replace=day_list, value=date_list) #change Days to actual date e.g. 42 days -> 2020-02-11
-    timestamp_transfer_hours = data['timestamp_transfer'].str.split(' ').str[2] #Just the Time of the Timestamp
-    timestamp_transfer_hours = timestamp_transfer_hours.str[:8]
-    data.timestamp_transfer =timestamp_transfer_date +" "+timestamp_transfer_hours #Combine Days and Hours in one column
-    data['timestamp_transfer'] = pd.to_datetime(data.timestamp_transfer) #Convert to actual timestamps
+    timestamp_index_date = data['timestamp_index'].str.split(' ').str[0] #Just the Days of the Timestamp
+    timestamp_index_date = timestamp_index_date.replace(to_replace=day_list, value=date_list) #change Days to actual date e.g. 42 days -> 2020-02-11
+    timestamp_index_hours = data['timestamp_index'].str.split(' ').str[2] #Just the Time of the Timestamp
+    timestamp_index_hours = timestamp_index_hours.str[:8]
+    data.timestamp_index =timestamp_index_date +" "+timestamp_index_hours #Combine Days and Hours in one column
+    data['timestamp_index'] = pd.to_datetime(data.timestamp_index) #Convert to actual timestamps
 
     #for timestamp_measure_position
     timestamp_measure_position_date= data['timestamp_measure_position'].str.split(' ').str[0] #Just the Days of the Timestamp
@@ -52,7 +52,7 @@ def plot_delta_timestamps(data):
     data['timestamp_measure_position'] = pd.to_datetime(data.timestamp_measure_position) #Convert to actual timestamps
 
     #add coloumn with delta timestamp in seconds
-    data['delta_timestamps'] = (data.timestamp_transfer - data.timestamp_measure_position).dt.total_seconds()
+    data['delta_timestamps'] = (data.timestamp_index - data.timestamp_measure_position).dt.total_seconds()
 
     # Change the coordinates to geoPoints
     data['coordinates'] = data[['longitude', 'latitude']].values.tolist()
@@ -79,7 +79,7 @@ for file in sorted(os.listdir('C:/Users/BIE/Desktop/Python/MLA/MLA_2122/data')):
     chunk_list = []  #append each chunk df here 
     df_chunk = pd.read_csv('data/'+file, usecols = ['latitude',
                                                     'longitude',
-                                                    'timestamp_transfer',
+                                                    'timestamp_index',
                                                     'timestamp_measure_position'
                                                     ], low_memory = True, chunksize=100000)
     # Each chunk is in df format
@@ -99,7 +99,6 @@ for file in sorted(os.listdir('C:/Users/BIE/Desktop/Python/MLA/MLA_2122/data')):
 #concat the list of files into dataframe
 df_all_files = pd.concat(file_list)
     
-#print(df_all_files)
 # end time
 end = time.time()
 # total time taken
