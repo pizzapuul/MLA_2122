@@ -63,9 +63,9 @@ df_file = dd.multi.concat(file_list)
 
 
 corr = df_file.corr()
-orr = corr.drop(['determination_position'], axis=1)
 corr = corr.compute()
-corr = corr.drop('determination_position', axis=0)
+corr.drop('determination_position', axis=0, inplace=True)
+corr.drop('determination_position', axis=1, inplace=True)
 print(corr)
 
 # end time
